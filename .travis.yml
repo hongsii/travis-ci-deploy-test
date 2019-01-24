@@ -1,3 +1,6 @@
+language: java
+jdk:
+  - openjdk8
 branches:
   only:
     - master
@@ -8,29 +11,17 @@ env:
     - AWS_BUCKET=mart-holiday-alarm
     - GITHUB_REPO=hongsii/travis-ci-deploy-test
 before_deploy:
+    - echo $TRAVIS_BRANCH
 deploy:
   - provider: s3
     access_key_id: "$AWS_ACCESS_KEY2"
     secret_access_key: "$AWS_SECRET_KEY2"
-    bucket: $AWS_BUCKET
-    region: $AWS_REGION
+    bucket: "$AWS_BUCKET"
+    region: "$AWS_REGION"
     skip_cleanup: true
     acl: public_read
     wait-until-deployed: true
     upload-dir: master
     on:
-      repo: $GITHUB_REPO
-      branch: master
-  - provider: codedeploy
-    access_key_id: "$AWS_ACCESS_KEY2"
-    secret_access_key: "$AWS_SECRET_KEY2"
-    bucket: $AWS_BUCKET
-    region: $AWS_REGION
-    key: mart-holiday-alarm.zip
-    bundle_type: zip
-    application: mart-holiday-alarm
-    deployment_group: mart-holiday-alarm-group
-    wait-until-deployed: true
-    on:
-      repo: $GITHUB_REPO
+      repo: "$GITHUB_REPO"
       branch: master
