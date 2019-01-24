@@ -8,8 +8,6 @@ env:
     - AWS_BUCKET=mart-holiday-alarm
     - GITHUB_REPO=hongsii/travis-ci-deploy-test
 before_deploy:
-  - if [ "$TRAVIS_BRANCH" = "master" ]; then zip -r master/mart-holiday-alarm *; fi
-  - if [ "$TRAVIS_BRANCH" = "develop" ]; then zip -r develop/mart-holiday-alarm *; fi
 deploy:
   - provider: s3
     access_key_id: "$AWS_ACCESS_KEY2"
