@@ -1,0 +1,6 @@
+version: 0.0
+os: linux
+files:
+  - source: /deploy
+    destination: /home/ubuntu/app/mart-holiday-alarm/source/
+
