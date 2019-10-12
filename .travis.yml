@@ -21,37 +21,13 @@ cache:
         - "$HOME/.m2/repository"
         - "$HOME/.gradle"
 script: "./gradlew clean build"
+
 before_deploy:
     - echo $AWS_REGION
     - echo $DEPLOY_DIR
     - echo $TRAVIS_BRANCH
     - echo $TRAVIS_REPO_SLUG
-    - if [ "$TRAVIS_BRANCH" = "develop" ]; then zip -r martholidayalarm *; fi
-    - if [ "$TRAVIS_BRANCH" = "master" ]; then echo "develop "; zip -r mart-holiday-alarm *; mkdir -p $DEPLOY_DIR && mv mart-holiday-alarm.zip $_; ls .; fi
-deploy:
-  - provider: s3
-    access_key_id: $AWS_ACCESS_KEY2
-    secret_access_key: $AWS_SECRET_KEY2
-    region: $AWS_REGION
-    bucket: $APP_NAME
-    local_dir: $DEPLOY_DIR
-    upload_dir: $DEPLOY_DIR
-    skip_cleanup: true
-    acl: public_read
-    wait-until-deployed: true
-    on:
-      repo: $TRAVIS_REPO_SLUG
-      branch: $TRAVIS_BRANCH
-  - provider: codedeploy
-    access_key_id: $AWS_ACCESS_KEY2
-    secret_access_key: $AWS_SECRET_KEY2
-    region: $AWS_REGION
-    bucket: $APP_NAME
-    key: $DEPLOY_DIR/$APP_NAME.zip
-    bundle_type: zip
-    application: $APP_NAME
-    deployment_group: $APP_NAME-group
-    wait-until-deployed: true
-    on:
-      repo: $TRAVIS_REPO_SLUG
-      branch: $TRAVIS_BRANCH
+
+after_success:
+  - ./gradlew cobertura coveralls
+  -
