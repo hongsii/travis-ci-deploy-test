@@ -30,4 +30,3 @@ before_deploy:
 
 after_success:
   - ./gradlew cobertura coveralls
-  -
